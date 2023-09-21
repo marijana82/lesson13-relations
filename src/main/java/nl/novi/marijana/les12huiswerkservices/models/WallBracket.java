@@ -9,13 +9,13 @@ public class WallBracket {
     //primary key
     @Id
     @GeneratedValue
-    Long id;
+    private Long id;
 
     //variable declarations
-    String size;
-    Boolean adjustable;
-    String name;
-    Double price;
+    private String size;
+    private Boolean adjustable;
+    private String name;
+    private Double price;
 
 
     //getters & setters
