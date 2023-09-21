@@ -1,13 +1,24 @@
 package nl.novi.marijana.les12huiswerkservices.models;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+
+@Entity
 public class WallBracket {
+    //primary key
+    @Id
+    @GeneratedValue
     Long id;
+
+    //variable declarations
     String size;
     Boolean adjustable;
     String name;
     Double price;
 
 
+    //getters & setters
     public Long getId() {
         return id;
     }

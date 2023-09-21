@@ -6,6 +6,7 @@ import jakarta.persistence.Id;
 
 @Entity
 public class Television {
+    //primary key
     @Id
     @GeneratedValue
     Long id;

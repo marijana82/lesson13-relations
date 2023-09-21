@@ -1,11 +1,22 @@
 package nl.novi.marijana.les12huiswerkservices.models;
 
-public class CiModule {
-    Long id;
-    String name;
-    String type;
-    Double price;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
 
+@Entity
+public class CiModule {
+    //primary key
+    @Id
+    @GeneratedValue
+    Long id;
+
+    //variable declarations
+    private String name;
+    private String type;
+    private Double price;
+
+    //getters & setters
     public Long getId() {
         return id;
     }

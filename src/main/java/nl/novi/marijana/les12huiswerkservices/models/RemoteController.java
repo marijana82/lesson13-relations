@@ -1,7 +1,17 @@
 package nl.novi.marijana.les12huiswerkservices.models;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+
+@Entity
 public class RemoteController {
+    //primary key
+    @Id
+    @GeneratedValue
     Long id;
+
+    //variable declarations
     String compatibleWith;
     String batteryType;
     String name;
