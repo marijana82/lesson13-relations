@@ -73,7 +73,6 @@ public class Television {
 
 
         //getters & setters for all variables
-
         //id
         public Long getId() {
             return id;
