@@ -9,15 +9,15 @@ public class RemoteController {
     //primary key
     @Id
     @GeneratedValue
-    Long id;
+    private Long id;
 
     //variable declarations
-    String compatibleWith;
-    String batteryType;
-    String name;
-    String brand;
-    Double price;
-    Integer originalStock;
+    private String compatibleWith;
+    private String batteryType;
+    private String name;
+    private String brand;
+    private Double price;
+    private Integer originalStock;
 
     public Long getId() {
         return id;

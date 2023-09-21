@@ -37,7 +37,7 @@ public class TelevisionInputDto {
     public Boolean bluetooth;
     @NotNull
     public Boolean ambilight;
-    @PositiveOrZero(message="Negative stock not allowed")
+    @PositiveOrZero(message="Negative stock is not allowed")
     public Integer originalStock;
     @Min(0)
     @Max(100)
