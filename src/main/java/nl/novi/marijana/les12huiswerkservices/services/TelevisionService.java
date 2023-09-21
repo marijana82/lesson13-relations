@@ -1,7 +1,5 @@
 package nl.novi.marijana.les12huiswerkservices.services;
 
-//annotation @Service
-
 import nl.novi.marijana.les12huiswerkservices.dtos.TelevisionDto;
 import nl.novi.marijana.les12huiswerkservices.exceptions.RecordNotFoundException;
 import nl.novi.marijana.les12huiswerkservices.models.Television;
@@ -15,7 +13,6 @@ import java.util.Optional;
 
 @Service
 public class TelevisionService {
-
     private final TelevisionRepository televisionRepository;
 
     //1. create constructor with dependency injection referring to repository class,

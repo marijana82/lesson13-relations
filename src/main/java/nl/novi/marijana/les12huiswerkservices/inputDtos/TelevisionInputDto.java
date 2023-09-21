@@ -13,7 +13,7 @@ public class TelevisionInputDto {
     public String type;
     @NotNull(message="brand is required")
     public String brand;
-    @Size(max=30, message="name must be min 0 and max 30 characters long")
+    @Size(min=1, max=30, message="name must be min 1 and max 30 characters long")
     public String name;
     @Positive(message="price must be higher than 0")
     public Double price;
