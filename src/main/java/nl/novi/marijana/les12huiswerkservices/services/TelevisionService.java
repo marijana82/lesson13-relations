@@ -3,7 +3,6 @@ package nl.novi.marijana.les12huiswerkservices.services;
 //annotation @Service
 
 import nl.novi.marijana.les12huiswerkservices.dtos.TelevisionDto;
-import nl.novi.marijana.les12huiswerkservices.dtos.TelevisionInputDto;
 import nl.novi.marijana.les12huiswerkservices.exceptions.RecordNotFoundException;
 import nl.novi.marijana.les12huiswerkservices.models.Television;
 import nl.novi.marijana.les12huiswerkservices.repositories.TelevisionRepository;

@@ -2,9 +2,7 @@ package nl.novi.marijana.les12huiswerkservices.controllers;
 
 import jakarta.validation.Valid;
 import nl.novi.marijana.les12huiswerkservices.dtos.TelevisionDto;
-import nl.novi.marijana.les12huiswerkservices.dtos.TelevisionInputDto;
 import nl.novi.marijana.les12huiswerkservices.services.TelevisionService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

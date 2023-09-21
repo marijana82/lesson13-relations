@@ -1,4 +1,4 @@
-package nl.novi.marijana.les12huiswerkservices.dtos;
+package nl.novi.marijana.les12huiswerkservices.inputDtos;
 
 import jakarta.validation.constraints.*;
 
