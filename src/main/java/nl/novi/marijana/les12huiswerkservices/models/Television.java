@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 public class Television {
     //primary key
     @Id
+    //strategy=GenerationType.IDENTITY makes sure the ids in the table get generated from 1 to higher up.
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
@@ -28,7 +29,13 @@ public class Television {
     private Integer originalStock;
     private Integer sold;
 
-    //default constructor
+    //creating many-to-many relationship between Television and WallBracket
+    //delete contructor, otherwise i get error @ManyToMany not compatible with a constructor!
+    @ManyToMany
+
+
+
+   /* //default constructor
     public Television() {}
 
 
@@ -69,7 +76,7 @@ public class Television {
         this.ambilight = ambilight;
         this.originalStock = originalStock;
         this.sold = sold;
-    }
+    }*/
 
 
         //getters & setters for all variables
