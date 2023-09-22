@@ -4,6 +4,7 @@ import nl.novi.marijana.les12huiswerkservices.dtos.TelevisionDto;
 import nl.novi.marijana.les12huiswerkservices.exceptions.RecordNotFoundException;
 import nl.novi.marijana.les12huiswerkservices.models.Television;
 import nl.novi.marijana.les12huiswerkservices.repositories.TelevisionRepository;
+import nl.novi.marijana.les12huiswerkservices.repositories.WallBracketRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -11,14 +12,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+//*****RELATIONS STEP 3:
+//1. add WallBracketRepository wallBracketRepository as dependency injection
+//1.a. now we can reach the repositories of both television & wallBracket
+//2. go to TelevisionController to create @PostMapping request
 @Service
 public class TelevisionService {
     private final TelevisionRepository televisionRepository;
+    private final WallBracketRepository wallBracketRepository;
 
     //1. create constructor with dependency injection referring to repository class,
     // ---this way I force SpringBoot to instantiate televisionRepository object (above)
-    public TelevisionService(TelevisionRepository televisionRepository) {
+    public TelevisionService(TelevisionRepository televisionRepository, WallBracketRepository wallBracketRepository) {
         this.televisionRepository = televisionRepository;
+        this.wallBracketRepository = wallBracketRepository;
     }
 
     //2. create methods that are "linked" to mapping methods and dtos in the controller and to the entities in the repository

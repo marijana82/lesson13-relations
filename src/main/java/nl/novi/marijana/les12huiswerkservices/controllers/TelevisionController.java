@@ -50,6 +50,16 @@ public class TelevisionController {
         return ResponseEntity.created(null).body(dto);
     }
 
+    //*****RELATIONS STEP 4:
+    //1. create @PostMapping method
+    //2. go to TelevisionDto
+    @PostMapping
+    public ResponseEntity<TelevisionDto> createTelevision(@Valid @RequestBody TelevisionDto televisionDto) {
+
+        return ResponseEntity.created(null).body();
+    }
+
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteTelevision(@PathVariable  Long id) {

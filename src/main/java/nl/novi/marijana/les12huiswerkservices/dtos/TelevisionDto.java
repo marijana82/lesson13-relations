@@ -23,6 +23,11 @@ public class TelevisionDto {
             private Integer originalStock;
             private Integer sold;
 
+    //*****RELATIONS STEP 5:
+        //1. create wallBracketIds variable where we will save Ids of the wallBrackets
+    //******CONTINUE FROM HERE!
+            private long[] wallBracketIds;
+
     public Long getId() {
         return id;
     }

@@ -31,12 +31,13 @@ public class Television {
     private Integer originalStock;
     private Integer sold;
 
-    // Television is the owner of the relationship - my choice!
+    //*****RELATIONS STEP 1:
+    // Television is *the owner* of the relationship - my choice!
     // 1. create filed variable called wallBrackets
     // 2. create many-to-many relationship between Television and WallBracket
     //---by adding annotation @ManyToMany above the field
     // * reminder: delete contructor, otherwise i get error @ManyToMany not compatible with a constructor!
-    // 3. add getter & setter for HashSet wallBrackets
+    // 3. create getter & setter for HashSet wallBrackets
     // 4. go to the WallBracket entity
     @ManyToMany
     private HashSet<WallBracket> wallBrackets;
