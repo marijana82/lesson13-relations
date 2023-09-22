@@ -2,6 +2,8 @@ package nl.novi.marijana.les12huiswerkservices.models;
 
 import jakarta.persistence.*;
 
+import java.util.HashSet;
+
 @Entity
 @Table(name="televisions")
 public class Television {
@@ -29,9 +31,15 @@ public class Television {
     private Integer originalStock;
     private Integer sold;
 
-    //creating many-to-many relationship between Television and WallBracket
-    //delete contructor, otherwise i get error @ManyToMany not compatible with a constructor!
+    // Television is the owner of the relationship - my choice!
+    // 1. create filed variable called wallBrackets
+    // 2. create many-to-many relationship between Television and WallBracket
+    //---by adding annotation @ManyToMany above the field
+    // * reminder: delete contructor, otherwise i get error @ManyToMany not compatible with a constructor!
+    // 3. add getter & setter for HashSet wallBrackets
+    // 4. go to the WallBracket entity
     @ManyToMany
+    private HashSet<WallBracket> wallBrackets;
 
 
 
@@ -233,9 +241,17 @@ public class Television {
             this.sold = sold;
         }
 
+        //wallBrackets
+        public HashSet<WallBracket> getWallBrackets() {
+        return wallBrackets;
+        }
+
+        public void setWallBrackets(HashSet<WallBracket> wallBrackets) {
+        this.wallBrackets = wallBrackets;
+        }
 
 
-    }
+}
 
 
 

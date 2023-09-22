@@ -2,6 +2,8 @@ package nl.novi.marijana.les12huiswerkservices.models;
 
 import jakarta.persistence.*;
 
+import java.util.HashSet;
+
 @Entity
 @Table(name="wall_brackets")
 public class WallBracket {
@@ -15,6 +17,14 @@ public class WallBracket {
     private Boolean adjustable;
     private String name;
     private Double price;
+
+    //1. create filed variable called televisions
+    //2. create many-to-many relationship between WallBracket and Television
+    //---by adding annotation @ManyToMany above the field
+
+    @ManyToMany
+    private HashSet<Television> televisions;
+
 
 
     //getters & setters
