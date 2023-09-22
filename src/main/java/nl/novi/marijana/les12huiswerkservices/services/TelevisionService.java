@@ -3,6 +3,7 @@ package nl.novi.marijana.les12huiswerkservices.services;
 import nl.novi.marijana.les12huiswerkservices.dtos.TelevisionDto;
 import nl.novi.marijana.les12huiswerkservices.exceptions.RecordNotFoundException;
 import nl.novi.marijana.les12huiswerkservices.models.Television;
+import nl.novi.marijana.les12huiswerkservices.models.WallBracket;
 import nl.novi.marijana.les12huiswerkservices.repositories.TelevisionRepository;
 import nl.novi.marijana.les12huiswerkservices.repositories.WallBracketRepository;
 import org.springframework.stereotype.Service;
@@ -147,6 +148,41 @@ public class TelevisionService {
         televisionRepository.save(televisionNew);
         televisionDto.setId(televisionNew.getId());
         return televisionDto;*/
+
+    //********MANY-TO-MANY RELATION: create television (post-request)
+    public TelevisionDto createTelevision(TelevisionDto tvDto) {
+        Television tv = transferToTv(tvDto);
+        televisionRepository.save(tv);
+        return transferToTvDto(tv);
+    }
+
+    //transfer dto to entity
+    public Television transferToTv(TelevisionDto tvDto) {
+        Television tvConverted = new Television();
+        tvConverted.setName(tvDto.getName());
+        tvConverted.setAvailableSize(tvDto.getAvailableSize());
+        tvConverted.setType(tvDto.getType());
+        tvConverted.setBluetooth(tvDto.getBluetooth());
+        //...the rest of the fields
+        //***loop to connect the right tvs to the right wall brackets:
+        for(long id : tvDto.wallBracketIds) {
+            //here we are taking the wallBracket entity out of the wallBracketRepository
+            WallBracket wallBracket = wallBracketRepository.findById(id).get(); // happy flow
+            tvConverted.getWallBrackets().add(wallBracket);
+        }
+        return tvConverted;
+    }
+
+    //transfer entity to dto
+    public TelevisionDto transferToTvDto(Television tv) {
+        TelevisionDto tvDtoConverted = new TelevisionDto();
+        tvDtoConverted.setType(tv.getType());
+        tvDtoConverted.setWifi(tv.getWifi());
+        tvDtoConverted.setScreenType(tv.getScreenType());
+        //how to get to the right id?????????
+        tvDtoConverted.setId(tv.getId());
+        return tvDtoConverted;
+    }
 
 
 

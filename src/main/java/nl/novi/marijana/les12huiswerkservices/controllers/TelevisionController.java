@@ -3,6 +3,7 @@ package nl.novi.marijana.les12huiswerkservices.controllers;
 import jakarta.validation.Valid;
 import nl.novi.marijana.les12huiswerkservices.dtos.TelevisionDto;
 import nl.novi.marijana.les12huiswerkservices.services.TelevisionService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -55,8 +56,8 @@ public class TelevisionController {
     //2. go to TelevisionDto
     @PostMapping
     public ResponseEntity<TelevisionDto> createTelevision(@Valid @RequestBody TelevisionDto televisionDto) {
-
-        return ResponseEntity.created(null).body();
+        TelevisionDto dto = televisionService.createTelevision(televisionDto);
+        return new ResponseEntity<>(televisionDto, HttpStatus.CREATED);
     }
 
 

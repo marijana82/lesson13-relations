@@ -26,7 +26,7 @@ public class TelevisionDto {
     //*****RELATIONS STEP 5:
         //1. create wallBracketIds variable where we will save Ids of the wallBrackets
     //******CONTINUE FROM HERE!
-            private long[] wallBracketIds;
+            public long[] wallBracketIds;
 
     public Long getId() {
         return id;
@@ -163,4 +163,6 @@ public class TelevisionDto {
     public void setSold(Integer sold) {
         this.sold = sold;
     }
+
+
 }
