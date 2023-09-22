@@ -111,7 +111,8 @@ public class TelevisionService {
     //2.call for method transferToTelevision and fill the argument with tvDto;
     // ---2.a. tvDto enters the body of the method and gets converted to datatype Television
     // ---2.b. the RETURN of the method transferToTelevision gets saved in the variable tvTransferred
-    //3.save tvTransferred into the repository
+    //---2.c. data saved in the variable tvTransferred gets passed on to the variable tvTelevision of datatype Television
+    //3.save tvTelevision into the repository
     //4.once the variable has been saved into the repository, the user has to receive a response;
     //---4.a.the response has to travel from the repository to the service and from the service to the controller
     //---4.b.the response from repository to service is sent as entity, but it has to be translated from entity to dto
