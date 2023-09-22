@@ -3,8 +3,10 @@ package nl.novi.marijana.les12huiswerkservices.models;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name="ci_modules")
 public class CiModule {
     //primary key
     @Id
