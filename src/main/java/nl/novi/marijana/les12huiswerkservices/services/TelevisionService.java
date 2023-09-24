@@ -2,8 +2,10 @@ package nl.novi.marijana.les12huiswerkservices.services;
 
 import nl.novi.marijana.les12huiswerkservices.dtos.TelevisionDto;
 import nl.novi.marijana.les12huiswerkservices.exceptions.RecordNotFoundException;
+import nl.novi.marijana.les12huiswerkservices.models.RemoteController;
 import nl.novi.marijana.les12huiswerkservices.models.Television;
 import nl.novi.marijana.les12huiswerkservices.models.WallBracket;
+import nl.novi.marijana.les12huiswerkservices.repositories.RemoteControllerRepository;
 import nl.novi.marijana.les12huiswerkservices.repositories.TelevisionRepository;
 import nl.novi.marijana.les12huiswerkservices.repositories.WallBracketRepository;
 import org.springframework.stereotype.Service;
@@ -21,12 +23,14 @@ import java.util.Optional;
 public class TelevisionService {
     private final TelevisionRepository televisionRepository;
     private final WallBracketRepository wallBracketRepository;
+    private final RemoteControllerRepository remoteControllerRepository;
 
     //1. create constructor with dependency injection referring to repository class,
     // ---this way I force SpringBoot to instantiate televisionRepository object (above)
-    public TelevisionService(TelevisionRepository televisionRepository, WallBracketRepository wallBracketRepository) {
+    public TelevisionService(TelevisionRepository televisionRepository, WallBracketRepository wallBracketRepository, RemoteControllerRepository remoteControllerRepository) {
         this.televisionRepository = televisionRepository;
         this.wallBracketRepository = wallBracketRepository;
+        this.remoteControllerRepository = remoteControllerRepository;
     }
 
     //2. create methods that are "linked" to mapping methods and dtos in the controller and to the entities in the repository
@@ -51,7 +55,7 @@ public class TelevisionService {
         for(Television t : televisions) {
             //5.single item
             TelevisionDto tdto = new TelevisionDto();
-            tdto.setId(t.getId());
+            //tdto.setId(t.getId());
             tdto.setAmbilight(t.getAmbilight());
             tdto.setAvailableSize(t.getAvailableSize());
             tdto.setHdr(t.getHdr());
@@ -156,32 +160,43 @@ public class TelevisionService {
         return transferToTvDto(tv);
     }
 
-    //transfer dto to entity
+    //transfer dto to entity - HERE IT'S GOING WRONG(LINE 154, 175)
     public Television transferToTv(TelevisionDto tvDto) {
-        Television tvConverted = new Television();
-        tvConverted.setName(tvDto.getName());
-        tvConverted.setAvailableSize(tvDto.getAvailableSize());
-        tvConverted.setType(tvDto.getType());
-        tvConverted.setBluetooth(tvDto.getBluetooth());
+        Television tv = new Television();
+        tv.setName(tvDto.getName());
+        tv.setAvailableSize(tvDto.getAvailableSize());
+        tv.setType(tvDto.getType());
+        tv.setBluetooth(tvDto.getBluetooth());
+        tv.setPrice(tvDto.getPrice());
+        tv.setHdr(tvDto.getHdr());
+        tv.setScreenType(tvDto.getScreenType());
         //...the rest of the fields
+
         //***loop to connect the right tvs to the right wall brackets:
-        for(long id : tvDto.wallBracketIds) {
+
+        //********set out, it's not working because of this:
+        //line 175 is where i'm getting the null pointer exception(tvDto.wallBracketIds)
+       for(Long id : tvDto.wallBracketIds) {
             //here we are taking the wallBracket entity out of the wallBracketRepository
-            WallBracket wallBracket = wallBracketRepository.findById(id).get(); // happy flow
-            tvConverted.getWallBrackets().add(wallBracket);
-        }
-        return tvConverted;
+           Optional<WallBracket> optionalWallBracket = wallBracketRepository.findById(id);
+           if(optionalWallBracket.isPresent()) {
+               tv.getWallBrackets().add(optionalWallBracket.get());
+           }
+       }
+       televisionRepository.save(tv);
+       tv.setId(tvDto.getId()); //???
+
+       return tv;
     }
 
     //transfer entity to dto
     public TelevisionDto transferToTvDto(Television tv) {
-        TelevisionDto tvDtoConverted = new TelevisionDto();
-        tvDtoConverted.setType(tv.getType());
-        tvDtoConverted.setWifi(tv.getWifi());
-        tvDtoConverted.setScreenType(tv.getScreenType());
-        //how to get to the right id?????????
-        tvDtoConverted.setId(tv.getId());
-        return tvDtoConverted;
+        TelevisionDto dto = new TelevisionDto();
+        dto.setType(tv.getType());
+        dto.setWifi(tv.getWifi());
+        dto.setScreenType(tv.getScreenType());
+        dto.setId(tv.getId());
+        return dto;
     }
 
 
@@ -230,6 +245,27 @@ public class TelevisionService {
 
     //update one television
    // public TelevisionDto updateOneTelevision() {}
+
+
+    //add remote controller to television (put-request)
+    public void addRemConToTv(Long televisionid, Long remote_Controllerid) {
+        Optional <RemoteController> remoteControllerOptional = remoteControllerRepository.findById(remote_Controllerid);
+        if(remoteControllerOptional.isPresent()) {
+            Optional <Television> televisionOptional = televisionRepository.findById(televisionid);
+            if(televisionOptional.isPresent()) {
+                RemoteController rc = remoteControllerOptional.get();
+                Television tv = televisionOptional.get();
+                tv.setRemoteController(rc);
+                televisionRepository.save(tv);
+             }
+        }
+
+
+
+
+
+
+    }
 
 
 

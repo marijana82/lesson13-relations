@@ -2,7 +2,10 @@ package nl.novi.marijana.les12huiswerkservices.models;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name="wall_brackets")
@@ -30,7 +33,8 @@ public class WallBracket {
     //5. go to the SERVICE of the owner class (TelevisionService)
 
     @ManyToMany(mappedBy = "wallBrackets")
-    private HashSet<Television> televisions;
+    private List<Television> televisions = new ArrayList<>();
+    //OR ??? private List<Television> televisions;
 
 
 
@@ -75,16 +79,12 @@ public class WallBracket {
         this.price = price;
     }
 
-    public HashSet<Television> getTelevisions() {
+    public List<Television> getTelevisions() {
         return televisions;
     }
 
-    public void setTelevisions(HashSet<Television> televisions) {
+    public void setTelevisions(List<Television> televisions) {
         this.televisions = televisions;
     }
-
-
-
-
 
 }

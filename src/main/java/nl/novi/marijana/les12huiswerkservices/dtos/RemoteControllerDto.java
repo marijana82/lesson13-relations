@@ -11,6 +11,18 @@ public class RemoteControllerDto {
     private Double price;
     private Integer originalStock;
 
+    public TelevisionDto televisionDto;
+
+
+    //getters & setters
+
+    public TelevisionDto getTelevisionDto() {
+        return televisionDto;
+    }
+
+    public void setTelevisionDto(TelevisionDto televisionDto) {
+        this.televisionDto = televisionDto;
+    }
 
     public Long getId() {
         return id;

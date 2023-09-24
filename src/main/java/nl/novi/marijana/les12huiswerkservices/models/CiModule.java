@@ -2,6 +2,9 @@ package nl.novi.marijana.les12huiswerkservices.models;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name="ci_modules")
 public class CiModule {
@@ -14,6 +17,15 @@ public class CiModule {
     private String name;
     private String type;
     private Double price;
+
+    //ciModule must contain a list of televisions
+    //because it contains a list, this side cannot be the owner
+    //---because we can't save a list in the database!
+    //so, in one-to-many relation, the "one" side is the target!
+    @OneToMany(mappedBy = "ciModule")
+    private List<Television> televisions = new ArrayList<>();
+    //OR ??? private List<Television> televisions;
+
 
     //getters & setters
     public Long getId() {

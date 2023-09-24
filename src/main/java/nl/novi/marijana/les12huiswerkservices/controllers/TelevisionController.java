@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 
 //annotation @RestController!
 //annotation @RequestMapping with a path
@@ -42,23 +43,36 @@ public class TelevisionController {
         return ResponseEntity.ok().body(television);
     }
 
-
-    @PostMapping
+//had to hide this @PostMapping method because it was clashing with the new one I made and could not run the system
+  /* @PostMapping
     public ResponseEntity<TelevisionDto> addTelevision(@Valid @RequestBody TelevisionDto televisionDto) {
         TelevisionDto dto = televisionService.saveOneTelevision(televisionDto);
 
         //or create URI and fill .created with uri!
-        return ResponseEntity.created(null).body(dto);
-    }
+        //return ResponseEntity.created(null).body(dto);
+        return new ResponseEntity<>(dto, HttpStatus.CREATED);
+    }*/
 
     //*****RELATIONS STEP 4:
     //1. create @PostMapping method
     //2. go to TelevisionDto
-    @PostMapping
+
+    //****THIS ONE IS NOT WORKING, CHECK WHY!!
+   @PostMapping
     public ResponseEntity<TelevisionDto> createTelevision(@Valid @RequestBody TelevisionDto televisionDto) {
-        TelevisionDto dto = televisionService.createTelevision(televisionDto);
-        return new ResponseEntity<>(televisionDto, HttpStatus.CREATED);
+       //HERE IT'S GOING WRONG! where I'm calling .createTelevision method
+       TelevisionDto dto = televisionService.createTelevision(televisionDto);
+        return new ResponseEntity<>(dto, HttpStatus.CREATED);
     }
+
+
+    @PutMapping("/{television}/{remoteController}")
+    public ResponseEntity<String>addRemoteToTv(@PathVariable Long television, @PathVariable Long remoteController) {
+        televisionService.addRemConToTv(television, remoteController);
+        return ResponseEntity.ok("Success");
+
+    }
+
 
 
 

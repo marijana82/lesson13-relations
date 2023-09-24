@@ -18,6 +18,10 @@ public class RemoteController {
     private Double price;
     private Integer originalStock;
 
+    //target poiting to owner
+    @OneToOne(mappedBy = "remoteController")
+    private Television television;
+
     public Long getId() {
         return id;
     }
