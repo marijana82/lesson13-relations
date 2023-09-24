@@ -28,6 +28,14 @@ public class CiModule {
 
 
     //getters & setters
+    public List<Television> getTelevisions() {
+        return televisions;
+    }
+
+    public void setTelevisions(List<Television> televisions) {
+        this.televisions = televisions;
+    }
+
     public Long getId() {
         return id;
     }

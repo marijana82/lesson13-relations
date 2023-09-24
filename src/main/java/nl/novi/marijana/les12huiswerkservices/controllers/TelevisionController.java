@@ -25,33 +25,7 @@ public class TelevisionController {
     }
 
     //from here on mapping methods (get, post, put, patch, delete)
-    //De requestMappings in de Controller worden aangepast
-    // ---zodat deze de juiste response doorgeven via de Service;
 
-
-    //get all televisions ??? WHY NOT LIKE THIS ??? why can't i just do televisionService.getAlltelevisions?
-    @GetMapping
-    public ResponseEntity<List<TelevisionDto>> getAllTelevisions() {
-        return ResponseEntity.ok().body(televisionService.getAllTelevisions());
-    }
-
-    //get one television
-    @GetMapping("/{id}")
-    public ResponseEntity<TelevisionDto> getOneTelevision(@PathVariable("id") Long id) {
-        TelevisionDto television = televisionService.getOneTelevision(id);
-
-        return ResponseEntity.ok().body(television);
-    }
-
-//had to hide this @PostMapping method because it was clashing with the new one I made and could not run the system
-  /* @PostMapping
-    public ResponseEntity<TelevisionDto> addTelevision(@Valid @RequestBody TelevisionDto televisionDto) {
-        TelevisionDto dto = televisionService.saveOneTelevision(televisionDto);
-
-        //or create URI and fill .created with uri!
-        //return ResponseEntity.created(null).body(dto);
-        return new ResponseEntity<>(dto, HttpStatus.CREATED);
-    }*/
 
     //*****RELATIONS STEP 4:
     //1. create @PostMapping method
@@ -68,20 +42,42 @@ public class TelevisionController {
 
     @PutMapping("/{television}/{remoteController}")
     public ResponseEntity<String>addRemoteToTv(@PathVariable Long television, @PathVariable Long remoteController) {
-        televisionService.addRemConToTv(television, remoteController);
+        televisionService.assignRemoteControllerToTelevision(television, remoteController);
         return ResponseEntity.ok("Success");
-
     }
-
-
 
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteTelevision(@PathVariable  Long id) {
         televisionService.deleteTelevision(id);
-
         return ResponseEntity.noContent().build();
     }
+
+
+
+    //old code, not using it in this homework:
+    //get all televisions
+   /* @GetMapping
+    public ResponseEntity<List<TelevisionDto>> getAllTelevisions() {
+        return ResponseEntity.ok().body(televisionService.getAllTelevisions());
+    }*/
+
+    //get one television
+   /* @GetMapping("/{id}")
+    public ResponseEntity<TelevisionDto> getOneTelevision(@PathVariable("id") Long id) {
+        TelevisionDto television = televisionService.getOneTelevision(id);
+
+        return ResponseEntity.ok().body(television);
+    }*/
+
+
+   /* @PostMapping
+    public ResponseEntity<TelevisionDto> addTelevision(@Valid @RequestBody TelevisionDto televisionDto) {
+        TelevisionDto dto = televisionService.saveOneTelevision(televisionDto);
+        //or create URI and fill .created with uri!
+        //return ResponseEntity.created(null).body(dto);
+        return new ResponseEntity<>(dto, HttpStatus.CREATED);
+    }*/
 
 
 

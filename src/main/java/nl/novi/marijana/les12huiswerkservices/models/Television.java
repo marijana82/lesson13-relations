@@ -34,12 +34,11 @@ public class Television {
     private Integer sold;
 
     //*****RELATIONS STEP 1:
-    // Television is *the owner* of the relationship - my choice!
-    // 1. create filed variable called wallBrackets
+    // Television is *the owner* of the relationships - my choice!
+    // 1. create field variable called wallBrackets
     // 2. create many-to-many relationship between Television and WallBracket
     //---by adding annotation @ManyToMany above the field
-    // * reminder: delete contructor, otherwise i get error @ManyToMany not compatible with a constructor!
-    // 3. create getter & setter for HashSet wallBrackets
+    // 3. create getter & setter for List wallBrackets
     // 4. go to the WallBracket entity
 
     //owner of the tv-wallBracket relationship
@@ -53,6 +52,7 @@ public class Television {
     @OneToOne
     @JoinColumn(name = "compatible_with_remote_controller")
     private RemoteController remoteController;
+
 
     //in many-to-one relation the "many" side has to be the owner!
     @ManyToOne

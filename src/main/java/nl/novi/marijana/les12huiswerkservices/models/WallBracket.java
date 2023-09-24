@@ -22,14 +22,14 @@ public class WallBracket {
     private Double price;
 
     //*****RELATIONS STEP 2:
-    //1. create filed variable called televisions
+    //1. create field variable called televisions
     //2. create many-to-many relationship between WallBracket and Television
     //---by adding annotation @ManyToMany above the field
     //3. add mappedBy="wallBrackets" to point to the owner of the relationship
     //---(owner is Television,
     // ---mappedBy refers to the field variable wallBrackets
     //---which we created in the Television class)
-    //4. create getter & setter for HashSet televisions
+    //4. create getter & setter for List televisions
     //5. go to the SERVICE of the owner class (TelevisionService)
 
     @ManyToMany(mappedBy = "wallBrackets")
@@ -39,6 +39,13 @@ public class WallBracket {
 
 
     //getters & setters
+    public List<Television> getTelevisions() {
+        return televisions;
+    }
+
+    public void setTelevisions(List<Television> televisions) {
+        this.televisions = televisions;
+    }
     public Long getId() {
         return id;
     }
@@ -79,12 +86,6 @@ public class WallBracket {
         this.price = price;
     }
 
-    public List<Television> getTelevisions() {
-        return televisions;
-    }
 
-    public void setTelevisions(List<Television> televisions) {
-        this.televisions = televisions;
-    }
 
 }

@@ -22,6 +22,16 @@ public class RemoteController {
     @OneToOne(mappedBy = "remoteController")
     private Television television;
 
+
+    //getters & setters
+    public Television getTelevision() {
+        return television;
+    }
+
+    public void setTelevision(Television television) {
+        this.television = television;
+    }
+
     public Long getId() {
         return id;
     }
