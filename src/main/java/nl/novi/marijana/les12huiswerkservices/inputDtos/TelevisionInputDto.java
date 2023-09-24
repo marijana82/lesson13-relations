@@ -1,4 +1,4 @@
-package nl.novi.marijana.les12huiswerkservices.dtos;
+package nl.novi.marijana.les12huiswerkservices.inputDtos;
 
 import jakarta.validation.constraints.*;
 
@@ -13,7 +13,7 @@ public class TelevisionInputDto {
     public String type;
     @NotNull(message="brand is required")
     public String brand;
-    @Size(max=30, message="name must be min 0 and max 30 characters long")
+    @Size(min=1, max=30, message="name must be min 1 and max 30 characters long")
     public String name;
     @Positive(message="price must be higher than 0")
     public Double price;
@@ -37,7 +37,7 @@ public class TelevisionInputDto {
     public Boolean bluetooth;
     @NotNull
     public Boolean ambilight;
-    @PositiveOrZero(message="Negative stock not allowed")
+    @PositiveOrZero(message="Negative stock is not allowed")
     public Integer originalStock;
     @Min(0)
     @Max(100)

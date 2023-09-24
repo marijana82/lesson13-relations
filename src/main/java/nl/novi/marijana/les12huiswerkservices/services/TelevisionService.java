@@ -1,12 +1,13 @@
 package nl.novi.marijana.les12huiswerkservices.services;
 
-//annotation @Service
-
 import nl.novi.marijana.les12huiswerkservices.dtos.TelevisionDto;
-import nl.novi.marijana.les12huiswerkservices.dtos.TelevisionInputDto;
 import nl.novi.marijana.les12huiswerkservices.exceptions.RecordNotFoundException;
+import nl.novi.marijana.les12huiswerkservices.models.RemoteController;
 import nl.novi.marijana.les12huiswerkservices.models.Television;
+import nl.novi.marijana.les12huiswerkservices.models.WallBracket;
+import nl.novi.marijana.les12huiswerkservices.repositories.RemoteControllerRepository;
 import nl.novi.marijana.les12huiswerkservices.repositories.TelevisionRepository;
+import nl.novi.marijana.les12huiswerkservices.repositories.WallBracketRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -14,31 +15,116 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+//*****RELATIONS STEP 3:
+//1. add WallBracketRepository wallBracketRepository as dependency injection
+//1.a. now we can reach the repositories of both television & wallBracket
+//2. go to TelevisionController to create @PostMapping request
 @Service
 public class TelevisionService {
-
     private final TelevisionRepository televisionRepository;
+    private final WallBracketRepository wallBracketRepository;
+    private final RemoteControllerRepository remoteControllerRepository;
 
     //1. create constructor with dependency injection referring to repository class,
     // ---this way I force SpringBoot to instantiate televisionRepository object (above)
-    public TelevisionService(TelevisionRepository televisionRepository) {
+    public TelevisionService(TelevisionRepository televisionRepository, WallBracketRepository wallBracketRepository, RemoteControllerRepository remoteControllerRepository) {
         this.televisionRepository = televisionRepository;
+        this.wallBracketRepository = wallBracketRepository;
+        this.remoteControllerRepository = remoteControllerRepository;
     }
 
     //2. create methods that are "linked" to mapping methods and dtos in the controller and to the entities in the repository
-    //De Service maakt gebruik van de gegevens die we via de Controller doorkrijgen van de Dtos
+
+    //********MANY-TO-MANY RELATION: create television (post-request)
+    public TelevisionDto createTelevision(TelevisionDto tvDto) {
+        Television tv = transferToTv(tvDto);
+        televisionRepository.save(tv);
+        return transferToTvDto(tv);
+    }
+
+    //transfer dto to entity - HERE IT'S GOING WRONG(LINE 166)
+    public Television transferToTv(TelevisionDto tvDto) {
+        Television tv = new Television();
+        tv.setName(tvDto.getName());
+        tv.setAvailableSize(tvDto.getAvailableSize());
+        tv.setType(tvDto.getType());
+        tv.setBluetooth(tvDto.getBluetooth());
+        tv.setPrice(tvDto.getPrice());
+        tv.setHdr(tvDto.getHdr());
+        tv.setScreenType(tvDto.getScreenType());
+        //...the rest of the fields
+
+        //***loop to connect the right tvs to the right wall brackets:
+
+        //line 60 is where i'm getting the null pointer exception(tvDto.wallBracketIds)
+       for(Long id : tvDto.wallBracketIds) {
+            //here we are taking the wallBracket entity out of the wallBracketRepository
+           Optional<WallBracket> optionalWallBracket = wallBracketRepository.findById(id);
+           if(optionalWallBracket.isPresent()) {
+               tv.getWallBrackets().add(optionalWallBracket.get());
+           }
+       }
+       tv.setId(tvDto.getId()); //???
+
+       return tv;
+    }
+
+    //transfer entity to dto
+    public TelevisionDto transferToTvDto(Television tv) {
+        TelevisionDto dto = new TelevisionDto();
+        dto.setType(tv.getType());
+        dto.setWifi(tv.getWifi());
+        dto.setScreenType(tv.getScreenType());
+        dto.setId(tv.getId());
+        return dto;
+    }
+
+
+    //add remote controller to television (put-request)
+    public void assignRemoteControllerToTelevision(Long televisionid, Long remote_Controllerid) {
+        Optional <RemoteController> remoteControllerOptional = remoteControllerRepository.findById(remote_Controllerid);
+        if(remoteControllerOptional.isPresent()) {
+            Optional <Television> televisionOptional = televisionRepository.findById(televisionid);
+            if(televisionOptional.isPresent()) {
+                RemoteController rc = remoteControllerOptional.get();
+                Television tv = televisionOptional.get();
+                tv.setRemoteController(rc);
+                televisionRepository.save(tv);
+             }
+        }
+    }
+
+
+    //delete one television
+    public void deleteTelevision(@RequestBody Long id) {
+        televisionRepository.deleteById(id);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+    //not using in the code below, referring to old homework:
+
 
     //get all televisions - here we work with lists because we are returning many!
-        //1.this method returns a list of datatype TelevisionDto + no parameters!
-        //2.address all televisions saved in the repository with .findAll and save them in variable (list of entities) with datatype Television
-        //3.instantiate a new array list of datatype TelevisionDto - this doesnt exist yet so i have to make one
-        //4.now when i have both "ingredients" i can loop through televisions collection and save data referring to televisions in a new temporary variable of datatype Television
-        //5.in the loop body: instantiate a new object of datatype TelevisionDto
-        // ---and in the variable tdto save the television data received from looping through the list of Television entities
-        //6. after every line of data has been added to the variable tdto, add the tdto to the list of datatype TelevisionDto!
-        //7. return variable televisionDtos
+    //1.this method returns a list of datatype TelevisionDto + no parameters!
+    //2.address all televisions saved in the repository with .findAll and save them in variable (list of entities) with datatype Television
+    //3.instantiate a new array list of datatype TelevisionDto - this doesn't exist yet so i have to make one
+    //4.now when i have both "ingredients" i can loop through televisions collection and save data referring to televisions in a new temporary variable of datatype Television
+    //5.in the loop body: instantiate a new object of datatype TelevisionDto
+    // ---and in the variable tdto save the television data received from looping through the list of Television entities
+    //6. after every line of data has been added to the variable tdto, add the tdto to the list of datatype TelevisionDto!
+    //7. return variable televisionDtos
     //1.
-    public List<TelevisionDto> getAllTelevisions() {
+    /*public List<TelevisionDto> getAllTelevisions() {
         //2.list
         List<Television> televisions = televisionRepository.findAll();
         //3.list
@@ -47,7 +133,7 @@ public class TelevisionService {
         for(Television t : televisions) {
             //5.single item
             TelevisionDto tdto = new TelevisionDto();
-            tdto.setId(t.getId());
+            //tdto.setId(t.getId());
             tdto.setAmbilight(t.getAmbilight());
             tdto.setAvailableSize(t.getAvailableSize());
             tdto.setHdr(t.getHdr());
@@ -69,7 +155,7 @@ public class TelevisionService {
         }
         //7.return the list
         return televisionDtos;
-    }
+    }*/
 
     //get one television - here we are returning one, so no need for a list!
     //1.this method returns a list of datatype TelevisionDto + it takes on a parameter for id + its datatype!
@@ -89,7 +175,7 @@ public class TelevisionService {
     //6.if id is not present in the repository, the method throws new RecordNotFoundException
 
 
-    //1.
+   /* //1.
     public TelevisionDto getOneTelevision(Long id) {
         //2. + 2.a. + 3.
         Optional<Television> tvOptional = televisionRepository.findById(id);
@@ -99,14 +185,12 @@ public class TelevisionService {
             Television tvFound = tvOptional.get();
             //transferToDto is a separate method in which body we'll "translate or convert" an entity into a dto
             //5.d. - here i am actually returning the RESULT of the method transferToDto
-            return transferToDto(tvFound);
+            return transferToTvDto(tvFound);
         } else {
             //6.
             throw new RecordNotFoundException("sorry, no televisions found");
         }
-    }
-
-
+    }*/
 
     //save (add) one television (post-request)
     //the best practice is to create two separate "translation" methods and then just to call those methods within this response body
@@ -114,8 +198,9 @@ public class TelevisionService {
     //1.a.the return goes back to the controller, thus return datatype is also of dto
     //2.call for method transferToTelevision and fill the argument with tvDto;
     // ---2.a. tvDto enters the body of the method and gets converted to datatype Television
-    // ---2.b. the RETURN of the method transferToTelevision gets saved in the variable tvTransferred
-    //3.save tvTransferred into the repository
+    // ---2.b. the RETURN of the method transferToTelevision gets saved in the variable tv
+    //---2.c. data saved in the variable tv gets passed on to the variable tvTelevision of datatype Television
+    //3.save tvTelevision into the repository
     //4.once the variable has been saved into the repository, the user has to receive a response;
     //---4.a.the response has to travel from the repository to the service and from the service to the controller
     //---4.b.the response from repository to service is sent as entity, but it has to be translated from entity to dto
@@ -123,34 +208,22 @@ public class TelevisionService {
     //5.
 
     //1. + 1.a.
-    public TelevisionDto saveOneTelevision(TelevisionDto tvDto) {
+   /* public TelevisionDto saveOneTelevision(TelevisionDto tvDto) {
         //2. + 2.a. + 2.b.
-        Television tvTelevision = transferToTelevision(tvDto);
+        Television tvTelevision = transferToTv(tvDto);
         //3.
         televisionRepository.save(tvTelevision);
         //4. + 4.a. + 4.b. + 4.c.
         //5.
-        return transferToDto(tvTelevision);
+        return transferToTvDto(tvTelevision);
     }
-//how we used to do it:
-        /*Television televisionNew = new Television();
-        televisionNew.setName(televisionDto.getName());
-        televisionNew.setType(televisionDto.getType());
-        televisionNew.setBrand(televisionDto.getBrand());
-        televisionNew.setAvailableSize(televisionDto.getAvailableSize());
-        televisionNew.setScreenType(televisionDto.getScreenType());
-        televisionNew.setPrice(televisionDto.getPrice());
-        televisionRepository.save(televisionNew);
-        televisionDto.setId(televisionNew.getId());
-        return televisionDto;*/
-
-
+    */
 
 
     //transferToDto() method is used for entities found in repository that have to be returned to controller in the form of dto
     //transferToDto() method has to have TelevisionDto as return value! - because it is travelling back to the controller!
     //parameter has to be Television television, because the data is entering as entity from the repository
-    public TelevisionDto transferToDto(Television tvFound) {
+    /*public TelevisionDto transferToDto(Television tvFound) {
         //1.create a new container for saving data in the dto
         TelevisionDto dtoConverted = new TelevisionDto();
         //2.fill the dto container with the setter with the data we get from the Television entity
@@ -169,7 +242,6 @@ public class TelevisionService {
         return dtoConverted;
     }
 
-
     //transferToTelevision()
     public Television transferToTelevision(TelevisionDto televisionDto) {
         Television televisionConverted = new Television();
@@ -180,16 +252,10 @@ public class TelevisionService {
         televisionConverted.setAvailableSize(televisionDto.getAvailableSize());
         return televisionConverted;
     }
-
-    //delete one television
-    public void deleteTelevision(@RequestBody Long id) {
-        televisionRepository.deleteById(id);
-    }
+*/
 
 
 
-    //update one television
-   // public TelevisionDto updateOneTelevision() {}
 
 
 

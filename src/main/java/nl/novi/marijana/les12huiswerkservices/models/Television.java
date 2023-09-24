@@ -1,15 +1,20 @@
 package nl.novi.marijana.les12huiswerkservices.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Entity
+@Table(name="televisions")
 public class Television {
+    //primary key
     @Id
-    @GeneratedValue
+    //strategy=GenerationType.IDENTITY makes sure the ids in the table get generated from 1 to higher up.
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
-
     //variable declarations
     private String type;
     private String brand;
@@ -28,48 +33,31 @@ public class Television {
     private Integer originalStock;
     private Integer sold;
 
-    //default constructor
-    public Television() {}
+    //*****RELATIONS STEP 1:
+    // Television is *the owner* of the relationships - my choice!
+    // 1. create field variable called wallBrackets
+    // 2. create many-to-many relationship between Television and WallBracket
+    //---by adding annotation @ManyToMany above the field
+    // 3. create getter & setter for List wallBrackets
+    // 4. go to the WallBracket entity
+
+    //owner of the tv-wallBracket relationship
+    //the id gets saved in the owner!
+    @ManyToMany
+    @JoinColumn(name = "compatible_with_wall_bracket")
+    private List<WallBracket> wallBrackets = new ArrayList<>();
+
+    //owner of the tv-remoteController relationship
+    //the id gets saved in the owner!
+    @OneToOne
+    @JoinColumn(name = "compatible_with_remote_controller")
+    private RemoteController remoteController;
 
 
-    //all-variables-constructor
-    public Television(
-            Long id,
-            String type,
-            String brand,
-            String name,
-            Double price,
-            Double availableSize,
-            Double refreshRate,
-            String screenType,
-            String screenQuality,
-            Boolean startTv,
-            Boolean wifi,
-            Boolean voiceControl,
-            Boolean hdr,
-            Boolean bluetooth,
-            Boolean ambilight,
-            Integer originalStock,
-            Integer sold
-            ) {
-        this.id = id;
-        this.type = type;
-        this.brand = brand;
-        this.name = name;
-        this.price = price;
-        this.availableSize = availableSize;
-        this.refreshRate = refreshRate;
-        this.screenType = screenType;
-        this.screenQuality = screenQuality;
-        this.startTv = startTv;
-        this.wifi = wifi;
-        this.voiceControl = voiceControl;
-        this.hdr = hdr;
-        this.bluetooth = bluetooth;
-        this.ambilight = ambilight;
-        this.originalStock = originalStock;
-        this.sold = sold;
-    }
+    //in many-to-one relation the "many" side has to be the owner!
+    @ManyToOne
+    @JoinColumn(name = "compatible_with_ci_module")
+    private CiModule ciModule;
 
 
         //getters & setters for all variables
@@ -226,9 +214,19 @@ public class Television {
             this.sold = sold;
         }
 
+        //wallBrackets
+        public List<WallBracket> getWallBrackets() {
+        return wallBrackets;
+        }
+
+        public void setWallBrackets(List<WallBracket> wallBrackets) {
+        this.wallBrackets = wallBrackets;
+        }
 
 
+    public void setRemoteController(RemoteController rc) {
     }
+}
 
 
 

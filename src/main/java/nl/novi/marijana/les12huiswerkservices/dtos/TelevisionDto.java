@@ -1,6 +1,7 @@
 package nl.novi.marijana.les12huiswerkservices.dtos;
 
 import jakarta.validation.constraints.*;
+import nl.novi.marijana.les12huiswerkservices.models.RemoteController;
 import nl.novi.marijana.les12huiswerkservices.models.Television;
 
 //here no validation necessary because this is the output dto, the validation takes place in the input dto
@@ -22,6 +23,29 @@ public class TelevisionDto {
             private Boolean ambilight;
             private Integer originalStock;
             private Integer sold;
+
+    //*****RELATIONS STEP 5:
+        //1. create wallBracketIds variable where we will save Ids of the wallBrackets
+    //******CONTINUE FROM HERE!
+            public long[] wallBracketIds;
+            public RemoteControllerDto remoteControllerDto;
+
+
+    public long[] getWallBracketIds() {
+        return wallBracketIds;
+    }
+
+    public void setWallBracketIds(long[] wallBracketIds) {
+        this.wallBracketIds = wallBracketIds;
+    }
+
+    public RemoteControllerDto getRemoteControllerDto() {
+        return remoteControllerDto;
+    }
+
+    public void setRemoteControllerDto(RemoteControllerDto remoteControllerDto) {
+        this.remoteControllerDto = remoteControllerDto;
+    }
 
     public Long getId() {
         return id;
@@ -158,4 +182,6 @@ public class TelevisionDto {
     public void setSold(Integer sold) {
         this.sold = sold;
     }
+
+
 }
